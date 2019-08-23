@@ -761,6 +761,8 @@ orbDelay=0
 shieldcounter=0
 paused=0
 lead_y_change=0
+pygame.mixer.music.load("sound/mega.mp3")
+pygame.mixer.music.play(-1)
 pygame.mouse.set_visible(False)
 clock=pygame.time.Clock()
 while not gameExit:
