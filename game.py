@@ -145,9 +145,9 @@ class Orb(PAI.gameobject.GameObject):
             self.images=Oimages1
         elif type==2:
             self.images=Oimages2
-        self.position = pygame.math.Vector2(random.randint(boundaryW, int(boundaryE-0.4*dragonDim)), random.randint(boundaryN, int(boundaryS-0.4*dragonDim)))
+        self.position = pygame.math.Vector2(random.randint(boundaryW+2, int(boundaryE-0.4*dragonDim)), random.randint(boundaryN+2, int(boundaryS-0.4*dragonDim)))
         while myDragon.position.x + 2 * dragonDim > self.position.x and myDragon.position.x < self.position.x + 2 * dragonDim and myDragon.position.y + 2 * dragonDim > self.position.y and myDragon.position.y < self.position.y + 2 * dragonDim:
-            self.position = pygame.math.Vector2(random.randint(boundaryW, int(boundaryE-0.4*dragonDim)),random.randint(boundaryN, int(boundaryS-0.4*dragonDim)))
+            self.position = pygame.math.Vector2(random.randint(boundaryW+2, int(boundaryE-0.4*dragonDim)),random.randint(boundaryN+2, int(boundaryS-0.4*dragonDim)))
         self.image = self.images
         self.rect.x = self.position.x
         self.rect.y = self.position.y
@@ -326,7 +326,7 @@ class Dragon(PAI.gameobject.GameObject):
         self.shielded=0
         self.images=[]
         self.orien=0
-        self.dmgBoost=0
+        self.dmgBoost=1
         self.visible=1
         self.dmgBoostCount=0
         imagesR=[]
@@ -426,6 +426,8 @@ class Eye(PAI.gameobject.GameObject):
             self.orien = 1
         return steering
     def seekWithApproach(self,target):
+        if (target-self.position).length()==0:
+            target+=(target.x+1,target.y)
         desired= (target-self.position)
         dist=desired.length()
         desired.normalize_ip()
@@ -590,7 +592,8 @@ def endgame():
 pygame.init()
 global gameScore
 global SEEKING
-global DIFFICULTY,SEEK_SPEED,SEEK_ATTACK,BOSS_ATTACK,BOSS_SPEED,shieldcounter
+global DIFFICULTY,SEEK_SPEED,SEEK_ATTACK,BOSS_ATTACK,BOSS_SPEED,shieldcounter,HARDMODE
+HARDMODE=0
 gameScore=0
 SEEKING=0
 DIFFICULTY=1
@@ -810,6 +813,8 @@ while not gameExit:
                         triggerBoss()
                     if event.key == pygame.K_F4:
                         fireSuperShot()
+                    if event.key == pygame.K_F5:
+                        HARDMODE= not HARDMODE
                 if event.type==pygame.KEYUP:
                     if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                         lead_x_change=0
